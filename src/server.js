@@ -14,6 +14,7 @@ import errorMiddleware from './middleware/errorMiddleware.js';
 const app = express();
 secureMiddleware(app);
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/auth", authRouter);

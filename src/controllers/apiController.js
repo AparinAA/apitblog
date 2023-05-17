@@ -7,6 +7,7 @@ import { BadRequestError, NotFoundError, NotPermissionError } from '../module/er
 function apiController() {
     //Controlle to add the new article
     async function addArticle(req, res, next) {
+
         try {
             const { uid } = req.user;
 

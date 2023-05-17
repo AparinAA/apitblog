@@ -1,7 +1,7 @@
 import helmet from 'helmet';
 import slowDown from 'express-slow-down';
 import { rateLimit } from 'express-rate-limit';
-
+import cors from 'cors';
 //secure. remove header X-Powered-By, antiDDOS + default helmet security
 export default function (app) {
 
@@ -9,6 +9,12 @@ export default function (app) {
         res.removeHeader('X-Powered-By');
         next();
     });
+
+    const corsOptions = {
+        origin: "*"
+    };
+
+    app.use(cors(corsOptions));
 
     // app.use(helmet({
     //     contentSecurityPolicy: {
