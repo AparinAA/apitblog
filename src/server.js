@@ -13,7 +13,6 @@ import apiRouter from './routers/apiRouter.js';
 import secureMiddleware from './middleware/secureMiddleware.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const swaggerConfig = JSON.parse(
