@@ -1,15 +1,24 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerConfig from './swaggerConfig.json' assert { type: 'json' };
 
 import { connetToDB } from './module/db.js';
 import authRouter from './routers/authRouter.js';
 import apiRouter from './routers/apiRouter.js';
 import secureMiddleware from './middleware/secureMiddleware.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const swaggerConfig = JSON.parse(
+    fs.readFileSync(path.join(__dirname, './swaggerConfig.json'))
+);
 
 const app = express();
 secureMiddleware(app);
