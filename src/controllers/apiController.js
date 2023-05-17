@@ -75,7 +75,7 @@ function apiController() {
 
             if (article) {
                 const authorId = article.authorId;
-                if (+authorId === +uid) {
+                if (authorId === uid) {
                     const result = await db.collection('myCollection').deleteOne({ id });
                     if (result.deletedCount === 1) {
                         res.status(200).send(`Successfully deleted the ${id} article.`);
