@@ -34,7 +34,7 @@ app.use(errorMiddleware);
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 const port = process.env.PORT;
-const host = 'localhost';
+const host = process.env.HOST || 'localhost';
 
 connetToDB(() => {
     console.info('Successfully connected t database');
