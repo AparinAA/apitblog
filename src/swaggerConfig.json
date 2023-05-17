@@ -1,0 +1,370 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Blog with authorization",
+    "description": "Task.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/",
+      "description": "Blog description api"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Authtorization"
+        ],
+        "summary": "Creates a user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_signup_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authtorization"
+        ],
+        "summary": "Login a user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_login_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/users": {
+      "get": {
+        "tags": [
+          "Authtorization"
+        ],
+        "summary": "Get users.",
+        "responses": {
+          "201": {
+            "description": "All users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": [
+                  "user1",
+                  "user2",
+                  "user3"
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles": {
+      "get": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Get articles",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The numbers of items to return on the page",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Articles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagination"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Add article",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api_articles_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The new article was created."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/articles/{id}": {
+      "put": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Edit the article with the specified ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "format": "str"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/articles_id_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Article was edited"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Article"
+        ],
+        "summary": "Deletes the article with the specified ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "format": "str"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Article was deleted."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Article": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The article ID.",
+            "format": "uuid"
+          },
+          "authorId": {
+            "type": "string",
+            "description": "The author ID.",
+            "example": "123456UID"
+          },
+          "text": {
+            "type": "string",
+            "description": "The text of article.",
+            "example": "More text"
+          },
+          "date": {
+            "type": "integer",
+            "description": "Last edit time.",
+            "format": "int32",
+            "example": 1684250378159
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "string",
+            "example": "api/articles"
+          },
+          "context": {
+            "type": "string"
+          },
+          "next": {
+            "type": "string",
+            "example": "/api/articles?page=3&limit=20"
+          },
+          "prev": {
+            "type": "string",
+            "example": "/api/articles?page=1&limit=20"
+          },
+          "self": {
+            "type": "string",
+            "example": "api/articles?page=2&limit=20"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "_link": {
+            "$ref": "#/components/schemas/Link"
+          },
+          "page": {
+            "type": "integer",
+            "example": 2
+          },
+          "allPage": {
+            "type": "integer",
+            "example": 5
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            }
+          }
+        }
+      },
+      "auth_signup_body": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "auth_login_body": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        }
+      },
+      "api_articles_body": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "articles_id_body": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
