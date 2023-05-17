@@ -1,3 +1,3 @@
 ### API TO BLOG WITH AUTHORIZATION
 
-...
+[API documentation]('http://195.133.1.56:8080')
