@@ -73,4 +73,4 @@ function Controller() {
     }
 }
 
-export default Controller();
+export const authController = Controller();

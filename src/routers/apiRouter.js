@@ -1,12 +1,12 @@
 import { Router } from "express";
-import apiController from '../controllers/apiController.js';
+import { apiController } from '../controllers/apiController.js';
 import authMiddleware from "../middleware/authMiddleware.js";
 
 const apiRouter = new Router();
 
-apiRouter.get('/articles?(page=\d+&limit=\d+)?', apiController.getArticles);
-apiRouter.post('/articles', authMiddleware, apiController.addArticle);
-apiRouter.put('/articles/:id', authMiddleware, apiController.editArticle);
-apiRouter.delete('/articles/:id', authMiddleware, apiController.deleteArticle);
+apiRouter.get('/articles?(page=\d+&limit=\d+)?', apiController.getArticlesSave);
+apiRouter.post('/articles', authMiddleware, apiController.addArticleSave);
+apiRouter.put('/articles/:id', authMiddleware, apiController.editArticleSave);
+apiRouter.delete('/articles/:id', authMiddleware, apiController.deleteArticleSave);
 
 export default apiRouter;
