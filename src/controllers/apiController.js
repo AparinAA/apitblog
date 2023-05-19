@@ -140,7 +140,7 @@ function apiController() {
                 }
             }
 
-            return res.json(result);
+            return res.json(resultRequest);
         } catch {
             next(err);
         }
