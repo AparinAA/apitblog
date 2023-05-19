@@ -127,6 +127,19 @@ function apiController() {
                 return res.json(result);
             }
 
+            const result = {
+                _links: {
+                    "base": "/api/articles",
+                    "context": "",
+                    "next": null,
+                    "prev": null,
+                    "self": `/api/articles`
+                },
+                page: 1,
+                allPages: 1,
+                data: articles,
+            }
+
             return res.json({ data: articles });
         } catch {
             next(err);
