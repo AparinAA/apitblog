@@ -106,12 +106,13 @@ function apiController() {
                 throw new BadRequestError('Something went wrong. Articles are not found');
             }
 
+            let resultRequest = {};
             if (limit && page) {
                 const allPages = Math.ceil(articles.length / limit);
                 const nextPage = (page < allPages) ? `/api/articles?page=${page + 1}&limit=${limit}` : null;
                 const prevPage = (page > 1) ? `/api/articles?page=${page - 1}&limit=${limit}` : null;
 
-                const result = {
+                resultRequest = {
                     _links: {
                         "base": "/api/articles",
                         "context": "",
@@ -124,23 +125,22 @@ function apiController() {
                     data: articles.slice(start, start + limit),
                 }
 
-                return res.json(result);
+            } else {
+                resultRequest = {
+                    _links: {
+                        "base": "/api/articles",
+                        "context": "",
+                        "next": null,
+                        "prev": null,
+                        "self": `/api/articles`
+                    },
+                    page: 1,
+                    allPages: 1,
+                    data: articles,
+                }
             }
 
-            const result = {
-                _links: {
-                    "base": "/api/articles",
-                    "context": "",
-                    "next": null,
-                    "prev": null,
-                    "self": `/api/articles`
-                },
-                page: 1,
-                allPages: 1,
-                data: articles,
-            }
-
-            return res.json({ data: articles });
+            return res.json(result);
         } catch {
             next(err);
         }
