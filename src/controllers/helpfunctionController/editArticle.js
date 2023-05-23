@@ -3,16 +3,15 @@ import { NotFoundError, NotPermissionError } from '../../module/error.js';
 
 const editArticle = async (req, res) => {
     const { id } = req.params;
-    const { uid } = req.user;
-    const { text: afterEditText } = req.body;
 
     const article = await db.collection('myCollection').findOne({ id });
+
     if (article) {
         const authorId = article.authorId;
-        if (authorId == uid) {
+        if (authorId == req.user?.uid) {
             const date = Date.now();
             await db.collection('myCollection').updateOne({ id }, {
-                $set: { article: afterEditText, date }
+                $set: { article: req.body?.text, date }
             });
         } else {
             throw new NotPermissionError('You don\'t have permission to edit');

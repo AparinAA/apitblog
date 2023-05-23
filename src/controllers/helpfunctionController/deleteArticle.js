@@ -11,6 +11,7 @@ const deleteArticle = async (req, res) => {
         const authorId = article.authorId;
         if (authorId === uid) {
             const result = await db.collection('myCollection').deleteOne({ id });
+
             if (result.deletedCount === 1) {
                 return res.status(200).send(`Successfully deleted the ${id} article.`);
             } else {

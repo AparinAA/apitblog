@@ -1,8 +1,32 @@
 import { db } from '../../module/db.js';
 import { BadRequestError } from '../../module/error.js';
+import { applySpec, compose, prop } from 'ramda';
+
+const predictHelpUrl = (condition, page, limit) => {
+    return condition ? `/api/articles?page=${page}&limit=${limit}` : null;
+}
+
+const getLimit = prop('limit');
+const getPage = prop('page');
+
+const getLimitInt = compose(
+    parseInt,
+    getLimit
+);
+
+const getPageInt = compose(
+    parseInt,
+    getPage
+);
+
+const getParmsOfPage = applySpec({
+    limit: getLimitInt,
+    page: getPageInt
+});
+
 
 const getArticles = async (req, res) => {
-    let { limit, page } = req.query;
+    const { limit, page } = getParmsOfPage(req.query);
     const articles = await db.collection('myCollection').find({}).toArray();
 
     if (!articles) {
@@ -22,18 +46,12 @@ const getArticles = async (req, res) => {
     };
 
     if (limit && page) {
-        function predict(condition, page, limit) {
-            return condition ? `/api/articles?page=${page}&limit=${limit}` : null;
-        }
-
-        limit = parseInt(limit, 10);
-        page = parseInt(page, 10);
         const allPages = Math.ceil(articles.length / limit);
 
         resultRequest = {
             _links: {
-                "next": predict(page < allPages, page + 1, limit),
-                "prev": predict(page > 1, page - 1, limit),
+                "next": predictHelpUrl(page < allPages, page + 1, limit),
+                "prev": predictHelpUrl(page > 1, page - 1, limit),
                 "self": `/api/articles?page=${page}&limit=${limit}`
             },
             page,

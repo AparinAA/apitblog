@@ -6,19 +6,17 @@ const addArticle = async (req, res) => {
 
     if (uid) {
         const date = Date.now();
-        const id = "" + date + uid;
-        const { text } = req.body;
         const query = {
-            id,
+            id: "" + date + uid,
             authorId: uid,
-            article: text,
+            article: req.body?.text,
             date
         }
 
         const result = await db.collection('myCollection').insertOne(query);
 
         if (result.acknowledged) {
-            return res.status(200).send(`An article was inserted with the _id ${id}`);
+            return res.status(200).send(`An article was inserted with the _id ${query.id}`);
         }
     }
 
