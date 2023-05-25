@@ -1,15 +1,13 @@
 import { db } from '../../module/db.js';
 import { BadRequestError, NotFoundError, NotPermissionError } from '../../module/error.js';
+import { getUserUID, getIdFromParams, getIdAuthor } from './queryFunctions.js';
 
 const deleteArticle = async (req, res) => {
-    const { id } = req.params;
-    const { uid } = req.user;
-
+    const id = getIdFromParams(req);
     const article = await db.collection('myCollection').findOne({ id });
 
     if (article) {
-        const authorId = article.authorId;
-        if (authorId === uid) {
+        if (getIdAuthor(article) === getUserUID(req)) {
             const result = await db.collection('myCollection').deleteOne({ id });
 
             if (result.deletedCount === 1) {

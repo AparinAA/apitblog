@@ -1,18 +1,11 @@
 import { db } from '../../module/db.js';
 import { BadRequestError } from '../../module/error.js';
-import { applySpec, compose, prop } from 'ramda';
+import { applySpec } from 'ramda';
+import { getLimitInt, getPageInt } from './queryFunctions.js';
 
 const predictHelpUrl = (condition, page, limit) => {
     return condition ? `/api/articles?page=${page}&limit=${limit}` : null;
 }
-
-const getQuery = prop('query');
-const getLimit = prop('limit');
-const getPage = prop('page');
-
-const getLimitInt = compose(parseInt, getLimit, getQuery);
-
-const getPageInt = compose(parseInt, getPage, getQuery);
 
 const getParmsOfPage = applySpec({
     limit: getLimitInt,

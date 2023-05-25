@@ -1,10 +1,7 @@
 import { compose, prop } from 'ramda';
 import { db } from '../../module/db.js';
 import { NotFoundError, NotPermissionError } from '../../module/error.js';
-import { getUserUID, getTextFromBody, getIdFromParams } from './queryFunctions.js';
-
-// get ID author
-const getIdAuthor = compose(prop('authorId')); //main
+import { getUserUID, getTextFromBody, getIdFromParams, getIdAuthor } from './queryFunctions.js';
 
 const editArticle = async (req, res) => {
     const id = getIdFromParams(req);
