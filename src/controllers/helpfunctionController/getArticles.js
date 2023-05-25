@@ -6,18 +6,13 @@ const predictHelpUrl = (condition, page, limit) => {
     return condition ? `/api/articles?page=${page}&limit=${limit}` : null;
 }
 
+const getQuery = prop('query');
 const getLimit = prop('limit');
 const getPage = prop('page');
 
-const getLimitInt = compose(
-    parseInt,
-    getLimit
-);
+const getLimitInt = compose(parseInt, getLimit, getQuery);
 
-const getPageInt = compose(
-    parseInt,
-    getPage
-);
+const getPageInt = compose(parseInt, getPage, getQuery);
 
 const getParmsOfPage = applySpec({
     limit: getLimitInt,
@@ -25,7 +20,7 @@ const getParmsOfPage = applySpec({
 });
 
 const getArticles = async (req, res) => {
-    const { limit, page } = getParmsOfPage(req.query);
+    const { limit, page } = getParmsOfPage(req);
     const articles = await db.collection('myCollection').find({}).toArray();
 
     if (!articles) {

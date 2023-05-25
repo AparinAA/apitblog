@@ -1,17 +1,21 @@
+import { compose, prop } from 'ramda';
 import { db } from '../../module/db.js';
 import { NotFoundError, NotPermissionError } from '../../module/error.js';
+import { getUserUID, getTextFromBody, getIdFromParams } from './queryFunctions.js';
+
+// get ID author
+const getIdAuthor = compose(prop('authorId')); //main
 
 const editArticle = async (req, res) => {
-    const { id } = req.params;
+    const id = getIdFromParams(req);
 
     const article = await db.collection('myCollection').findOne({ id });
 
     if (article) {
-        const authorId = article.authorId;
-        if (authorId == req.user?.uid) {
+        if (getIdAuthor(article) === getUserUID(req)) {
             const date = Date.now();
             await db.collection('myCollection').updateOne({ id }, {
-                $set: { article: req.body?.text, date }
+                $set: { article: getTextFromBody(req), date }
             });
         } else {
             throw new NotPermissionError('You don\'t have permission to edit');
