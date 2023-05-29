@@ -10,7 +10,7 @@ function Controller() {
     //Controller to add the new article
     async function addArticleSave(req, res, next) {
         try {
-            addArticle(req, res);
+            await addArticle(req, res);
         } catch (err) {
             next(err);
         }
