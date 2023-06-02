@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "http://195.133.1.56:8080/",
+      "url": "http://195.133.1.56:8085/",
       "description": "Blog description api"
     },
     {
-      "url": "http://localhost:8080/",
+      "url": "http://localhost:8085/",
       "description": "Blog description api"
     }
   ],
